@@ -1,0 +1,727 @@
+// WordPress's gray scale and the admin colour scheme's theme colour.
+$gray-900: #1e1e1e;
+$gray-700: #757575;
+$gray-600: #949494;
+$gray-300: #ddd;
+$gray-100: #f0f0f0;
+$white: #fff;
+$theme: var(--wp-admin-theme-color, #3858e9);
+$alert-red: #cc1818;
+$alert-yellow: #f0b849;
+$alert-green: #4ab866;
+
+.refract-admin {
+	max-width: 1200px;
+	margin-top: 16px;
+	margin-right: 20px;
+}
+
+.refract-admin__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0 10px;
+	margin-bottom: 24px;
+	border-bottom: 1px solid $gray-300;
+
+	h1 {
+		margin: 0 16px 0 0;
+		padding: 14px 0;
+	}
+}
+
+.refract-admin__logo {
+	display: block;
+}
+
+.refract-admin__tabs {
+	display: flex;
+	align-self: stretch;
+	gap: 4px;
+
+	a {
+		display: flex;
+		align-items: center;
+		margin-bottom: -1px;
+		padding: 0 12px;
+		border-bottom: 3px solid transparent;
+		color: $gray-900;
+		font-size: 14px;
+		font-weight: 500;
+		text-decoration: none;
+
+		&:hover {
+			color: $theme;
+		}
+
+		&:focus {
+			box-shadow: none;
+			outline: 2px solid $theme;
+			outline-offset: -2px;
+		}
+
+		&[aria-current="page"] {
+			border-bottom-color: $theme;
+			font-weight: 600;
+		}
+	}
+}
+
+.refract-admin__page {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+
+	.components-notice {
+		margin: 0;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 1.3em;
+	}
+}
+
+.refract-admin__snackbars {
+	position: fixed;
+	bottom: 24px;
+	left: 184px;
+	z-index: 100000;
+}
+
+.refract-help {
+	margin: 4px 0 0;
+	color: $gray-700;
+	font-size: 12px;
+}
+
+// First run.
+
+.refract-first-run {
+
+	.components-card__body {
+		padding: 32px;
+	}
+
+	h2 {
+		margin-bottom: 8px;
+	}
+
+	p {
+		max-width: 560px;
+		font-size: 14px;
+	}
+}
+
+.refract-first-run__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px;
+	margin-top: 24px;
+}
+
+.refract-token {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+
+	p {
+		margin: 0;
+	}
+
+	.components-base-control {
+		width: 100%;
+		max-width: 420px;
+	}
+}
+
+// Setup after connecting: numbered steps.
+
+.refract-setup {
+
+	.components-card__body > .components-notice {
+		margin-bottom: 16px;
+	}
+}
+
+.refract-steps {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.refract-step {
+	margin: 0;
+	padding: 24px 0;
+	border-top: 1px solid $gray-100;
+
+	&:first-child {
+		padding-top: 8px;
+		border-top: 0;
+	}
+
+	&:last-child {
+		padding-bottom: 8px;
+	}
+}
+
+.refract-step__title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 12px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.refract-step__number {
+	display: inline-flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: $gray-900;
+	color: $white;
+	font-size: 12px;
+	line-height: 1;
+}
+
+.refract-step__content {
+	padding-left: 34px;
+}
+
+.refract-setup__workspace {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	max-width: 420px;
+
+	.components-base-control {
+		flex: 1;
+	}
+}
+
+// The settings: connection on top, section nav on the left, the form.
+
+.refract-settings {
+	display: grid;
+	grid-template-areas:
+		"connection connection"
+		"nav form";
+	grid-template-columns: 200px minmax(0, 1fr);
+	gap: 24px 32px;
+	align-items: start;
+}
+
+.refract-connection {
+	grid-area: connection;
+
+	.components-card__body {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+}
+
+.refract-connection__main {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px 16px;
+}
+
+.refract-connection__who {
+	flex: 1 1 280px;
+	min-width: 0;
+
+	p {
+		margin: 0;
+	}
+}
+
+.refract-connection__line {
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.refract-connection__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.refract-status {
+	flex-shrink: 0;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: $gray-600;
+
+	&.is-ok {
+		background: $alert-green;
+		box-shadow: 0 0 0 4px rgba(74, 184, 102, 0.2);
+	}
+
+	&.is-warning {
+		background: $alert-yellow;
+		box-shadow: 0 0 0 4px rgba(240, 184, 73, 0.25);
+	}
+
+	&.is-error {
+		background: $alert-red;
+		box-shadow: 0 0 0 4px rgba(204, 24, 24, 0.15);
+	}
+}
+
+.refract-nav {
+	position: sticky;
+	top: 48px;
+	grid-area: nav;
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		margin: 0;
+	}
+
+	a {
+		display: block;
+		padding: 6px 12px;
+		border-left: 3px solid transparent;
+		color: $gray-700;
+		font-size: 13px;
+		line-height: 1.4;
+		text-decoration: none;
+
+		&:hover {
+			color: $gray-900;
+		}
+
+		&:focus {
+			box-shadow: 0 0 0 2px $theme;
+			outline: 2px solid transparent;
+		}
+
+		&.is-active {
+			border-left-color: $theme;
+			color: $gray-900;
+			font-weight: 600;
+		}
+	}
+}
+
+.refract-settings__form {
+	display: flex;
+	grid-area: form;
+	flex-direction: column;
+	gap: 24px;
+	min-width: 0;
+}
+
+@media (max-width: 1080px) {
+
+	.refract-settings {
+		grid-template-areas:
+			"connection"
+			"form";
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.refract-nav {
+		display: none;
+	}
+}
+
+.refract-section {
+	scroll-margin-top: 48px;
+
+	.components-card__header {
+		gap: 16px;
+	}
+
+	.refract-admin__page & h2 {
+		font-size: 15px;
+		font-weight: 600;
+	}
+}
+
+.refract-section__summary {
+	color: $gray-700;
+	font-size: 13px;
+	text-align: right;
+}
+
+.refract-row {
+	display: grid;
+	grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+	gap: 8px 32px;
+	padding: 20px 0;
+	border-top: 1px solid $gray-100;
+
+	&:first-child {
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	&:last-child {
+		padding-bottom: 0;
+	}
+
+	&.is-wide {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.refract-row__title {
+	margin: 0;
+	color: $gray-900;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 20px;
+}
+
+.refract-row__text {
+	margin: 0;
+	line-height: 20px;
+}
+
+@media (max-width: 782px) {
+
+	.refract-row {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+// Settings that only apply while "Let Refract publish" is on.
+.refract-dependent {
+	margin-top: 20px;
+	padding-left: 16px;
+	border-left: 2px solid $gray-300;
+
+	.refract-row:first-child {
+		padding-top: 0;
+	}
+}
+
+.refract-field-error {
+	margin: 8px 0 0;
+	color: $alert-red;
+	font-weight: 500;
+}
+
+.refract-inline {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 24px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.refract-tokens .components-form-token-field__label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+// Radio choices as cards. The label's ::after covers the card, so a click
+// anywhere on it picks the choice.
+.refract-choices {
+
+	.components-radio-control__group-wrapper {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 12px;
+	}
+
+	.components-radio-control__option {
+		position: relative;
+		align-content: start;
+		align-items: start;
+		padding: 12px 14px;
+		border: 1px solid $gray-300;
+		border-radius: 4px;
+		background: $white;
+
+		&:hover {
+			border-color: $gray-600;
+		}
+
+		&:has(input:checked) {
+			border-color: $theme;
+			box-shadow: inset 0 0 0 1px $theme;
+		}
+
+		&:has(input:disabled) {
+			opacity: 0.6;
+		}
+	}
+
+	// Above the label's ::after, so the input itself still takes clicks.
+	.components-radio-control__input {
+		position: relative;
+		z-index: 1;
+		margin-top: 2px;
+	}
+
+	.components-radio-control__label {
+		font-weight: 500;
+		line-height: 20px;
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			cursor: pointer;
+		}
+	}
+
+	.components-radio-control__option-description {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 6px 8px;
+		color: $gray-700;
+	}
+}
+
+.refract-tag {
+	display: inline-block;
+	padding: 0 6px;
+	border-radius: 2px;
+	background: $gray-100;
+	color: $gray-900;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 18px;
+	white-space: nowrap;
+
+	&.is-cost {
+		background: #fcf9e8;
+		color: #8a4d00;
+	}
+
+	&.is-free {
+		background: #edfaef;
+		color: #00701a;
+	}
+}
+
+// Accounts: a card for each account, grouped by network.
+
+.refract-accounts {
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.refract-accounts__legend {
+	margin: 0 0 4px;
+	padding: 0;
+	color: $gray-900;
+}
+
+.refract-accounts__bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 16px;
+	margin-bottom: 16px;
+}
+
+.refract-accounts__count {
+	margin-right: auto;
+	color: $gray-700;
+}
+
+// Each network is a column of account cards; the columns wrap.
+.refract-accounts__groups {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 20px 16px;
+}
+
+.refract-accounts__group {
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.refract-accounts__network {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 8px;
+	padding: 0;
+	font-weight: 600;
+}
+
+.refract-accounts__list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.refract-account {
+	position: relative;
+	padding: 10px 12px;
+	border: 1px solid $gray-300;
+	border-radius: 4px;
+	background: $white;
+
+	&:hover {
+		border-color: $gray-600;
+	}
+
+	&:has(input:checked) {
+		border-color: $theme;
+		box-shadow: inset 0 0 0 1px $theme;
+	}
+
+	&:has(input:disabled) {
+		border-style: dashed;
+		background: $gray-100;
+		color: $gray-700;
+	}
+
+	// Name and star on the first line, the handle under them.
+	.components-checkbox-control__label {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		min-width: 0;
+		font-weight: 500;
+		line-height: 20px;
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			cursor: pointer;
+		}
+	}
+
+	&:has(input:disabled) .components-checkbox-control__label::after {
+		cursor: not-allowed;
+	}
+
+	.components-checkbox-control__input-container {
+		z-index: 1;
+		margin-top: 2px;
+	}
+}
+
+.refract-accounts__handle {
+	flex-basis: 100%;
+	order: 2;
+	overflow: hidden;
+	color: $gray-700;
+	font-weight: 400;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.refract-accounts__star {
+	order: 1;
+	margin-left: 4px;
+	color: #b26200;
+}
+
+// The save bar sticks to the bottom of the window while there are changes.
+
+.refract-savebar {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	&.is-dirty {
+		position: sticky;
+		bottom: 16px;
+		z-index: 20;
+	}
+}
+
+.refract-savebar__inner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px 12px;
+	padding: 12px 16px;
+	border: 1px solid $gray-300;
+	border-radius: 4px;
+	background: $white;
+
+	.is-dirty & {
+		border-color: $gray-600;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+	}
+}
+
+.refract-savebar__status {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-right: auto;
+	color: $gray-700;
+
+	.is-dirty & {
+		color: $gray-900;
+		font-weight: 500;
+
+		&::before {
+			content: "";
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: $alert-yellow;
+		}
+	}
+}
+
+// Activity.
+
+.refract-activity__table {
+
+	td {
+		vertical-align: top;
+	}
+}
+
+.refract-result {
+	display: block;
+	font-weight: 600;
+
+	&.is-ok {
+		color: #008a20;
+	}
+
+	&.is-error {
+		color: $alert-red;
+	}
+}
+
+.refract-result__message {
+	display: block;
+	margin: 2px 0;
+}
+
+.refract-mark {
+	flex-shrink: 0;
+}

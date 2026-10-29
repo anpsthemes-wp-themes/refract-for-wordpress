@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/wp-env.json",
+	"core": null,
+	"phpVersion": "8.4",
+	"mappings": {
+		"wp-content/plugins/refract": "."
+	},
+	"config": {
+		"WP_DEBUG": true,
+		"SCRIPT_DEBUG": true
+	},
+	"env": {
+		"tests": {
+			"mappings": {
+				"wp-content/mu-plugins": "./tests/e2e/mu-plugins",
+				"wp-content/plugins/refract-e2e-fake-seo": "./tests/e2e/plugins/refract-e2e-fake-seo",
+				"wp-content/plugins/classic-editor": "https://downloads.wordpress.org/plugin/classic-editor.zip"
+			}
+		}
+	}
+}

@@ -1,0 +1,52 @@
+{
+	"name": "refract-wordpress",
+	"version": "1.2.0",
+	"private": true,
+	"description": "Refract",
+	"license": "GPL-2.0-or-later",
+	"files": [
+		"build",
+		"src",
+		"assets",
+		"includes",
+		"languages",
+		"refract.php",
+		"uninstall.php",
+		"readme.txt"
+	],
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start",
+		"lint:js": "wp-scripts lint-js src tests/e2e playwright.config.js",
+		"lint:css": "wp-scripts lint-style \"src/**/*.scss\"",
+		"format": "wp-scripts format src",
+		"env": "wp-env",
+		"test:e2e": "wp-scripts test-playwright",
+		"screenshots": "REFRACT_SCREENSHOTS=1 wp-scripts test-playwright --retries=0",
+		"plugin-zip": "wp-scripts plugin-zip"
+	},
+	"dependencies": {
+		"@wordpress/api-fetch": "^8.0.0",
+		"@wordpress/block-editor": "^19.0.0",
+		"@wordpress/components": "^43.0.0",
+		"@wordpress/core-data": "^9.0.0",
+		"@wordpress/data": "^11.0.0",
+		"@wordpress/dom-ready": "^5.0.0",
+		"@wordpress/editor": "^16.0.0",
+		"@wordpress/element": "^10.0.0",
+		"@wordpress/hooks": "^5.0.0",
+		"@wordpress/i18n": "^7.0.0",
+		"@wordpress/icons": "^19.0.0",
+		"@wordpress/media-utils": "^6.0.0",
+		"@wordpress/notices": "^6.0.0",
+		"@wordpress/plugins": "^8.0.0",
+		"@wordpress/primitives": "^5.0.0",
+		"@wordpress/url": "^5.0.0"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.64.1",
+		"@wordpress/e2e-test-utils-playwright": "^3.1.0",
+		"@wordpress/env": "^12.0.0",
+		"@wordpress/scripts": "^37.0.0"
+	}
+}

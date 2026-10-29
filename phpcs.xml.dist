@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ruleset name="Refract">
+	<description>Coding standards for Refract</description>
+
+	<file>.</file>
+
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/build/*</exclude-pattern>
+	<exclude-pattern>/src/*</exclude-pattern>
+	<exclude-pattern>/tests/e2e/*</exclude-pattern>
+	<exclude-pattern>*.asset.php</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+	<arg name="parallel" value="8"/>
+
+	<config name="testVersion" value="8.1-"/>
+	<config name="minimum_wp_version" value="6.8"/>
+
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="refract"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<!-- Tests set core globals and fire core hooks on purpose. -->
+		<exclude-pattern>/tests/*</exclude-pattern>
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="refract"/>
+				<element value="Refract\WP"/>
+				<element value="REFRACT"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

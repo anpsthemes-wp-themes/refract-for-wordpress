@@ -1,0 +1,5 @@
+/build/
+/vendor/
+/artifacts/
+/test-results/
+/playwright-report/

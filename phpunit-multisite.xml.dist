@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="tests/phpunit/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	convertDeprecationsToExceptions="true"
+	>
+	<php>
+		<const name="WP_TESTS_MULTISITE" value="1" />
+	</php>
+	<testsuites>
+		<testsuite name="refract">
+			<directory prefix="class-test-" suffix=".php">./tests/phpunit/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

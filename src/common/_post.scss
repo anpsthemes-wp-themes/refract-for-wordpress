@@ -1,0 +1,177 @@
+.refract-post {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	.components-notice {
+		margin: 0;
+	}
+}
+
+.refract-post__status {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+
+	.components-spinner {
+		margin: 0;
+	}
+}
+
+.refract-post__buttons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+
+	.components-button.is-link {
+		text-align: left;
+	}
+}
+
+.refract-help {
+	margin: 4px 0 0;
+	color: #757575;
+	font-size: 12px;
+}
+
+.refract-label {
+	margin: 0 0 8px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+.refract-cost {
+	margin: 8px 0 0;
+}
+
+.refract-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.refract-chip.components-button {
+	gap: 6px;
+}
+
+.refract-send {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.refract-versions__list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.refract-version {
+	margin: 0;
+	padding: 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background: #fff;
+
+	&.is-failed {
+		border-color: #cc1818;
+	}
+}
+
+.refract-version__account {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.refract-version__handle {
+	overflow: hidden;
+	color: #757575;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.refract-version__mark {
+	display: flex;
+	color: #1e1e1e;
+}
+
+.refract-version__status {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 8px 0;
+	font-weight: 500;
+
+	.components-spinner {
+		margin: 0;
+	}
+}
+
+.refract-version__clicks,
+.refract-version__note {
+	margin: 0 0 8px;
+	color: #757575;
+	font-size: 12px;
+}
+
+.refract-version__text {
+	margin: 0;
+	white-space: pre-line;
+
+	&.is-clamped {
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-line-clamp: 4;
+		-webkit-box-orient: vertical;
+	}
+}
+
+.refract-version__image {
+	display: block;
+	width: 100%;
+	max-width: 240px;
+	height: auto;
+	margin-top: 8px;
+	border-radius: 2px;
+	object-fit: cover;
+}
+
+.refract-version__checks {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.refract-check {
+	margin: 0 0 4px;
+	font-size: 12px;
+
+	&.is-fail {
+		color: #cc1818;
+	}
+
+	&.is-warn {
+		color: #8a6100;
+	}
+}
+
+.refract-version__actions {
+	margin-top: 8px;
+}
+
+.refract-versions__footer {
+	margin-top: 12px;
+}
+
+.refract-versions__approvers {
+	margin: 8px 0 0;
+}

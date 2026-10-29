@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Help with Refract
+    url: https://refract.social/docs
+    about: How to use Refract, your account, plans and billing.
+  - name: Report a security issue
+    url: https://github.com/anpsthemes-wp-themes/refract-for-wordpress/blob/main/SECURITY.md
+    about: Email us instead of opening a public issue.

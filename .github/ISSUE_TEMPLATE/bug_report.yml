@@ -1,0 +1,70 @@
+name: Bug report
+description: Something in the plugin doesn't work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for telling us. Found a security issue? Don't post it here: see the [security policy](https://github.com/anpsthemes-wp-themes/refract-for-wordpress/blob/main/SECURITY.md).
+  - type: input
+    id: wordpress
+    attributes:
+      label: WordPress version
+      placeholder: "6.8.2"
+    validations:
+      required: true
+  - type: input
+    id: php
+    attributes:
+      label: PHP version
+      description: In WordPress, Tools › Site Health › Info › Server.
+      placeholder: "8.3"
+    validations:
+      required: true
+  - type: input
+    id: plugin
+    attributes:
+      label: Plugin version
+      description: In WordPress, on the Plugins screen.
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: editor
+    attributes:
+      label: Editor
+      options:
+        - Block editor
+        - Classic Editor
+        - Both
+        - Not about the editor
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to Refract › Settings.
+        2. Click "Connect to Refract".
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Include any error message, and a screenshot if it helps. Remove anything private first.
+    validations:
+      required: true
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: Multisite, other plugins that might be involved, your theme.
