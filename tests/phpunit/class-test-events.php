@@ -257,10 +257,34 @@ final class Test_Events extends Refract_Test_Case {
 		Link_Previews::print_tags();
 		$this->assertStringContainsString( '<meta property="og:title" content="Kolo &amp; Co." />', (string) ob_get_clean() );
 
+		// A password-protected post's text, excerpt and image stay behind the password: no tags at all.
+		$protected = self::factory()->post->create(
+			array(
+				'post_content'  => 'Only for members: the roast schedule.',
+				'post_password' => 'beans',
+			)
+		);
+		$this->go_to( get_permalink( $protected ) );
+		ob_start();
+		Link_Previews::print_tags();
+		$this->assertSame( '', (string) ob_get_clean() );
+
 		add_filter( 'refract_seo_plugin', static fn (): string => 'Rank Math' );
 		ob_start();
 		Link_Previews::print_tags();
 		$this->assertSame( '', (string) ob_get_clean() );
+	}
+
+	/**
+	 * A link from Refract reaches the activity log only as an http(s) URL.
+	 */
+	public function test_activity_links_are_http_only(): void {
+		Activity::log( 'posted', array( 'link' => 'javascript:alert(1)' ) );
+		Activity::log( 'posted', array( 'link' => 'https://www.instagram.com/p/abc/' ) );
+
+		$links = array_column( Activity::entries(), 'link' );
+
+		$this->assertSame( array( 'https://www.instagram.com/p/abc/', null ), $links );
 	}
 
 	/**

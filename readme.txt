@@ -39,7 +39,9 @@ The plugin can add social preview tags (Open Graph and X card), so your links sh
 = Networks =
 
 <!-- networks -->
-The networks you can connect today are listed on refract.social. This list is filled in from Refract when the plugin is released.
+Networks you can connect: TikTok, YouTube, Pinterest, Bluesky, Mastodon, Telegram, Discord, Tumblr, Slack, Pixelfed and DEV.
+
+Coming soon: Instagram, Facebook, Threads and X.
 <!-- /networks -->
 
 = What you need =
@@ -51,6 +53,8 @@ The networks you can connect today are listed on refract.social. This list is fi
 = Source code =
 
 The JavaScript in `build/` is made with [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts). Its unminified source is in the plugin's `src/` folder, and the build setup is in `package.json` and `webpack.config.js`. To build it yourself, run `npm install` and then `npm run build` in the plugin's folder. The source code is also on GitHub: [anpsthemes-wp-themes/refract-for-wordpress](https://github.com/anpsthemes-wp-themes/refract-for-wordpress).
+
+The network icons in `src/common/marks.js` come from [Simple Icons](https://simpleicons.org) (CC0 1.0). The Refract and LinkedIn marks are drawn for this plugin.
 
 == Installation ==
 
@@ -116,11 +120,13 @@ What's sent, and when:
 * When a post is sent to Refract, after you publish it or click "Send to Refract": the post's title, excerpt, text, link and images (with their alt text), and the accounts chosen for it. Updates to the post are sent the same way, unless you turn that off.
 * When the post sidebar loads its versions: the post's ID in Refract. When you approve versions, which ones you approved.
 * When you disconnect or delete the plugin: a request to end the connection.
+* When the post sidebar or the Classic Editor box shows a version's image: your browser loads the image from Refract's media host (https://media.refract.social).
+* When Refract publishes a post on your site: your site downloads the post's images from Refract's media host (https://media.refract.social) and adds them to your media library.
 
 Refract also sends requests to your site: it downloads the post's images from their links, sends updates about your versions, and, if you allow it, publishes or schedules posts on your site.
 
-Refract's terms of service: https://refract.social/terms
-Refract's privacy policy: https://refract.social/privacy
+Refract's terms of service: https://refract.social/legal/terms
+Refract's privacy policy: https://refract.social/legal/privacy
 
 == Changelog ==
 

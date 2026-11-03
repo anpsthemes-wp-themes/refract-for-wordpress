@@ -36,7 +36,8 @@ final class Link_Previews {
 	}
 
 	/**
-	 * Prints the tags on single posts when they're on.
+	 * Prints the tags on single posts when they're on. A password-protected post gets none: its excerpt, text and image
+	 * stay behind the password.
 	 */
 	public static function print_tags(): void {
 		if ( ! is_singular() || ! Settings::get()['link_previews'] || null !== Seo_Plugins::active() ) {
@@ -45,7 +46,7 @@ final class Link_Previews {
 
 		$post = get_queried_object();
 
-		if ( ! $post instanceof \WP_Post || ! in_array( $post->post_type, Settings::public_post_types(), true ) ) {
+		if ( ! $post instanceof \WP_Post || ! in_array( $post->post_type, Settings::public_post_types(), true ) || '' !== $post->post_password ) {
 			return;
 		}
 

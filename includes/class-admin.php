@@ -147,7 +147,7 @@ final class Admin {
 
 		if ( current_user_can( 'manage_options' ) && 'needs_reconnect' === Connection::status() && ( null === $screen || ! in_array( $screen->id, self::$pages, true ) ) ) {
 			printf(
-				'<div class="notice notice-warning"><p>%1$s</p><p><a class="button button-primary" href="%2$s">%3$s</a></p></div>',
+				'<div class="notice notice-warning is-dismissible"><p>%1$s</p><p><a class="button button-primary" href="%2$s">%3$s</a></p></div>',
 				esc_html__( 'Refract needs you to connect again. Your site can\'t send posts until you do.', 'refract' ),
 				esc_url( admin_url( 'admin.php?page=refract' ) ),
 				esc_html__( 'Reconnect', 'refract' )

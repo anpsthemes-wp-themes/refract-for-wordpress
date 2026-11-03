@@ -38,9 +38,8 @@ final class Admin_State {
 				'refract_url'  => $base,
 			),
 			'links'          => array(
-				'signup'    => $base . '/signup',
-				'tokens'    => $base . '/docs/api',
-				'directory' => 'https://wordpress.org/plugins/refract/',
+				'signup' => $base . '/signup',
+				'tokens' => $base . '/docs/api',
 			),
 			'settings'       => Settings::get(),
 			'after_versions' => Settings::WAIT_FOR_APPROVAL,

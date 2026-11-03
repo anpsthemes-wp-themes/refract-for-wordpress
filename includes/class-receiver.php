@@ -255,7 +255,7 @@ final class Receiver {
 		}
 
 		return array(
-			'url' => $image['url'],
+			'url' => $url,
 			'alt' => is_string( $image['alt'] ?? null ) ? sanitize_text_field( $image['alt'] ) : '',
 		);
 	}

@@ -17,6 +17,11 @@ defined( 'ABSPATH' ) || exit;
 final class Refract_Response {
 
 	/**
+	 * The keys of Refract's documents that hold links the admin screens use as an href or an image src.
+	 */
+	private const URL_KEYS = array( 'url', 'thumb_url', 'edit_url', 'permalink' );
+
+	/**
 	 * Builds a response.
 	 *
 	 * @param int                   $status  HTTP status.
@@ -89,6 +94,40 @@ final class Refract_Response {
 	 */
 	public function header( string $name ): string {
 		return $this->headers[ strtolower( $name ) ] ?? '';
+	}
+
+	/**
+	 * A link Refract sent, only when it's an http(s) URL: anything else (a javascript: link, a bad value) is null, so it
+	 * never reaches an href or a src.
+	 *
+	 * @param mixed $value The link.
+	 */
+	public static function safe_url( mixed $value ): ?string {
+		if ( ! is_string( $value ) || '' === $value ) {
+			return null;
+		}
+
+		$url = esc_url_raw( $value, array( 'http', 'https' ) );
+
+		return '' === $url ? null : $url;
+	}
+
+	/**
+	 * Refract's document with every link in it (URL_KEYS, at any depth) passed through safe_url().
+	 *
+	 * @param array<mixed> $data The document.
+	 * @return array<mixed>
+	 */
+	public static function with_safe_urls( array $data ): array {
+		foreach ( $data as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$data[ $key ] = self::with_safe_urls( $value );
+			} elseif ( is_string( $key ) && in_array( $key, self::URL_KEYS, true ) ) {
+				$data[ $key ] = self::safe_url( $value );
+			}
+		}
+
+		return $data;
 	}
 
 	/**

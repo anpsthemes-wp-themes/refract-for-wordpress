@@ -52,7 +52,7 @@ final class Activity {
 			'account' => isset( $fields['account'] ) && is_string( $fields['account'] ) ? $fields['account'] : null,
 			'ok'      => (bool) ( $fields['ok'] ?? true ),
 			'message' => isset( $fields['message'] ) && is_string( $fields['message'] ) ? $fields['message'] : '',
-			'link'    => isset( $fields['link'] ) && is_string( $fields['link'] ) && '' !== $fields['link'] ? $fields['link'] : null,
+			'link'    => Refract_Response::safe_url( $fields['link'] ?? null ),
 		);
 
 		$entries = self::stored();
@@ -87,7 +87,7 @@ final class Activity {
 				'account'    => $entry['account'],
 				'ok'         => $entry['ok'],
 				'message'    => $entry['message'],
-				'link'       => $entry['link'],
+				'link'       => Refract_Response::safe_url( $entry['link'] ),
 			);
 
 			if ( count( $entries ) >= $limit ) {

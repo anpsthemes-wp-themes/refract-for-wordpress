@@ -60,7 +60,7 @@ final class Post_Panel {
 				}
 			}
 
-			$refract = $versions;
+			$refract = is_array( $versions ) ? Refract_Response::with_safe_urls( $versions ) : null;
 		}
 
 		return array(
@@ -76,7 +76,7 @@ final class Post_Panel {
 			'own_key'       => null !== $credits && $credits['own_key'],
 			'fallback'      => '1' === get_post_meta( $post->ID, '_refract_fallback', true ),
 			'error'         => '' === $error || in_array( $state, array( 'sent', 'not_sent', 'queued' ), true ) ? null : $error,
-			'buy_url'       => '' === $buy_url ? null : $buy_url,
+			'buy_url'       => Refract_Response::safe_url( $buy_url ),
 			'needed'        => 'out_of_credits' === $state ? (int) get_post_meta( $post->ID, '_refract_needed', true ) : null,
 			'left'          => 'out_of_credits' === $state ? (int) get_post_meta( $post->ID, '_refract_left', true ) : null,
 			'sent_at'       => $sent_at > 0 ? $sent_at : null,

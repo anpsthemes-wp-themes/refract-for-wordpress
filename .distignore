@@ -27,7 +27,6 @@
 /playwright-report
 /playwright.config.js
 /playwright.config.ts
-/composer.json
 /composer.lock
 /package-lock.json
 /phpcs.xml
