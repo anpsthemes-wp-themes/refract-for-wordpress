@@ -764,7 +764,7 @@ export default function ConnectedSettings( { state, onState } ) {
 								'refract'
 							) }
 							help={ __(
-								'From Refract, you can publish or schedule posts to this site, or send them as drafts. Posts that come from Refract are never sent back to Refract.',
+								'Refract can create posts on this site, update the posts it created and move them to the trash. It can’t change anything else: not other posts, settings, users, plugins, themes or files. Posts that come from Refract are never sent back to Refract.',
 								'refract'
 							) }
 							checked={ settings.refract_publish }
@@ -781,7 +781,7 @@ export default function ConnectedSettings( { state, onState } ) {
 									hideLabelFromVision
 									label={ __( 'Publish as', 'refract' ) }
 									help={ __(
-										'Required. Only people who can publish posts are listed.',
+										'Required. Posts from Refract show this person as the author. Refract never signs in as them. Only people who can publish posts are listed.',
 										'refract'
 									) }
 									value={
@@ -859,13 +859,6 @@ export default function ConnectedSettings( { state, onState } ) {
 									options={ [
 										{
 											label: __(
-												'Publish and schedule posts',
-												'refract'
-											),
-											value: 'publish',
-										},
-										{
-											label: __(
 												'Send drafts only',
 												'refract'
 											),
@@ -874,6 +867,13 @@ export default function ConnectedSettings( { state, onState } ) {
 												'refract'
 											),
 											value: 'drafts',
+										},
+										{
+											label: __(
+												'Publish and schedule posts',
+												'refract'
+											),
+											value: 'publish',
 										},
 									] }
 									onChange={ set( 'refract_can' ) }

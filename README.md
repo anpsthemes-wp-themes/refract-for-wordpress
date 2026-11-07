@@ -25,9 +25,11 @@ back to your post, and the post editor shows the link to it and the clicks so fa
 
 ### From Refract to WordPress
 
-Your site becomes an account in Refract. From Refract you can publish or schedule blog posts to it, or send them as
-drafts. You choose which user the posts are published as, the default category, and whether Refract can publish or
-only send drafts. You can turn this off at any time.
+Your site becomes an account in Refract. From Refract you can send blog posts to it as drafts, or, if you allow it,
+publish or schedule them. Refract can create posts, update the posts it created and move them to the trash. It can't
+change anything else on your site: not other posts, settings, users, plugins, themes or files. It's off until you turn
+it on, and then sends drafts only unless you choose otherwise. You choose which user the posts show as their author
+(Refract never signs in as that user) and the default category. You can turn this off at any time.
 
 ### Link previews
 

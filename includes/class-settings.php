@@ -82,7 +82,7 @@ final class Settings {
 			'refract_publish'  => false,
 			'publish_as'       => 0,
 			'default_category' => 0,
-			'refract_can'      => 'publish',
+			'refract_can'      => 'drafts',
 			'link_previews'    => true,
 			'setup_done'       => false,
 		);

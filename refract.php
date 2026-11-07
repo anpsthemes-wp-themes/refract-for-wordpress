@@ -3,7 +3,7 @@
  * Plugin Name:       Refract
  * Plugin URI:        https://refract.social/platforms/wordpress
  * Description:       Turn each blog post into a post for every social network, in your voice. Approve every one, then let Refract schedule them.
- * Version:           1.2.0
+ * Version:           1.2.1
  * Requires at least: 6.8
  * Requires PHP:      8.1
  * Author:            Refract

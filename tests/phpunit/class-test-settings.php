@@ -26,7 +26,7 @@ final class Test_Settings extends Refract_Test_Case {
 		$this->assertSame( 'crop', $settings['images'] );
 		$this->assertSame( 'update', $settings['on_update'] );
 		$this->assertFalse( $settings['refract_publish'] );
-		$this->assertSame( 'publish', $settings['refract_can'] );
+		$this->assertSame( 'drafts', $settings['refract_can'], 'Publishing from Refract sends drafts until the site chooses otherwise.' );
 		$this->assertTrue( $settings['link_previews'] );
 		$this->assertFalse( $settings['setup_done'] );
 		$this->assertSame( 'wait_for_approval', get_option( Settings::AFTER_VERSIONS ) );

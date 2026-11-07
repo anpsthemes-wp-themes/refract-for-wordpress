@@ -4,7 +4,7 @@ Tags: social media, social sharing, schedule posts, open graph, content repurpos
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,7 +30,7 @@ Each version links back to your post, so your blog gets visits and your links ge
 
 = From Refract to WordPress =
 
-Your site becomes an account in Refract. From Refract you can publish or schedule blog posts to it, or send them as drafts. You choose which user the posts are published as, the default category, and whether Refract can publish or only send drafts. You can turn this off at any time.
+Your site becomes an account in Refract. From Refract you can send blog posts to it as drafts, or, if you allow it, publish or schedule them. Refract can create posts, update the posts it created and move them to the trash. It can't change anything else on your site: not other posts, settings, users, plugins, themes or files. It's off until you turn it on, and then sends drafts only unless you choose otherwise. You choose which user the posts show as their author (Refract never signs in as that user) and the default category. You can turn this off at any time.
 
 = Link previews =
 
@@ -92,7 +92,7 @@ By default, Refract updates the note when the title, excerpt or text changes. Yo
 
 = Can Refract publish to my site? =
 
-Only if you turn on "Let Refract publish to this site" in the settings. You can limit it to sending drafts. Posts that come from Refract are never sent back to Refract.
+Only if you turn on "Let Refract publish to this site" in the settings. It then sends drafts only, unless you choose "Publish and schedule posts". Refract can only create posts, update the posts it created and move them to the trash; it can't change anything else on your site. Posts that come from Refract are never sent back to Refract.
 
 = Does it work with multisite? =
 
@@ -123,12 +123,17 @@ What's sent, and when:
 * When the post sidebar or the Classic Editor box shows a version's image: your browser loads the image from Refract's media host (https://media.refract.social).
 * When Refract publishes a post on your site: your site downloads the post's images from Refract's media host (https://media.refract.social) and adds them to your media library.
 
-Refract also sends requests to your site: it downloads the post's images from their links, sends updates about your versions, and, if you allow it, publishes or schedules posts on your site.
+Refract also sends requests to your site: it downloads the post's images from their links, sends updates about your versions, and, if you allow it, creates posts (drafts unless you choose otherwise), updates the posts it created or moves them to the trash.
 
 Refract's terms of service: https://refract.social/legal/terms
 Refract's privacy policy: https://refract.social/legal/privacy
 
 == Changelog ==
+
+= 1.2.1 =
+* Publishing from Refract never acts as a user on your site. The "Publish as" person is only shown as the author, and what they can do is checked before anything changes.
+* Publishing from Refract sends drafts only until you choose "Publish and schedule posts".
+* The settings page says exactly what Refract can and can't do on your site.
 
 = 1.2.0 =
 * A clearer Settings page: the connection at the top, a section for each part (Sending, Accounts, Writing and images, Publishing from Refract, Link previews) with a summary of what's chosen, and links to jump between them.
@@ -144,6 +149,9 @@ Refract's privacy policy: https://refract.social/legal/privacy
 * First release: connect your site, send posts to Refract, preview and approve the versions in the editor, publish from Refract to your site, social preview tags and the Activity log.
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Publishing from Refract no longer acts as a user, and sends drafts only by default.
 
 = 1.2.0 =
 A clearer Settings page.

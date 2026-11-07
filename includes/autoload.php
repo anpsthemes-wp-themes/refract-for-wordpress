@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'REFRACT_VERSION' ) ) {
-	define( 'REFRACT_VERSION', '1.2.0' );
+	define( 'REFRACT_VERSION', '1.2.1' );
 }
 
 if ( ! defined( 'REFRACT_FILE' ) ) {

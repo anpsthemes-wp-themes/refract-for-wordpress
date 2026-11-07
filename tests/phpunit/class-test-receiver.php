@@ -31,7 +31,7 @@ final class Test_Receiver extends Refract_Test_Case {
 	private array $downloads = array();
 
 	/**
-	 * Connects with publishing on, and answers image downloads with a PNG.
+	 * Connects with publishing on (publish and schedule), and answers image downloads with a PNG.
 	 */
 	public function set_up(): void {
 		parent::set_up();
@@ -46,6 +46,7 @@ final class Test_Receiver extends Refract_Test_Case {
 			array(
 				'refract_publish' => true,
 				'publish_as'      => $this->editor,
+				'refract_can'     => 'publish',
 			)
 		);
 		_set_cron_array( array() );
@@ -113,9 +114,18 @@ final class Test_Receiver extends Refract_Test_Case {
 	}
 
 	/**
-	 * Publishing creates the post as the "Publish as" person, marked as from Refract, and never sends it back.
+	 * Publishing creates the post with the "Publish as" person as its author, marked as from Refract, and never sends it
+	 * back. Nobody is signed in while it's saved: Refract never acts as a user.
 	 */
 	public function test_publish(): void {
+		$saved_by = array();
+		add_action(
+			'save_post',
+			static function () use ( &$saved_by ): void {
+				$saved_by[] = get_current_user_id();
+			}
+		);
+
 		$response = $this->signed( 'POST', '/refract/v1/posts', $this->payload() );
 		$data     = $response->get_data();
 
@@ -132,7 +142,8 @@ final class Test_Receiver extends Refract_Test_Case {
 		$this->assertSame( array( 'New tag' ), wp_get_post_tags( $post->ID, array( 'fields' => 'names' ) ) );
 		$this->assertSame( array( (int) get_option( 'default_category' ) ), wp_get_post_categories( $post->ID ) );
 		$this->assertFalse( wp_next_scheduled( Plugin::CRON_SEND, array( $post->ID, '' ) ), 'Posts from Refract never go back.' );
-		$this->assertSame( 0, get_current_user_id(), 'The "Publish as" user is only for the request.' );
+		$this->assertNotEmpty( $saved_by );
+		$this->assertSame( array( 0 ), array_values( array_unique( $saved_by ) ), 'Nobody is signed in while the post is saved.' );
 
 		$again = $this->signed( 'POST', '/refract/v1/posts', $this->payload( array( 'title' => 'Updated title' ) ) );
 		$this->assertSame( 200, $again->get_status() );
@@ -251,7 +262,6 @@ final class Test_Receiver extends Refract_Test_Case {
 		$this->assertSame( 200, $removed->get_status() );
 		$this->assertSame( 'trash', $removed->get_data()['status'] );
 		$this->assertSame( 'trash', get_post_status( $id ) );
-		$this->assertSame( 0, get_current_user_id(), 'The "Publish as" user is only for the request.' );
 
 		$entry = Activity::entries()[0];
 		$this->assertSame( 'removed', $entry['event'] );
@@ -291,6 +301,39 @@ final class Test_Receiver extends Refract_Test_Case {
 		$this->assertSame( 403, $cannot->get_status() );
 		$this->assertSame( 'refract_cannot_remove', $cannot->get_data()['code'] );
 		$this->assertSame( 'publish', get_post_status( $id ) );
+	}
+
+	/**
+	 * Refract only updates and trashes the posts it made: a post without the Refract mark, or another post type with
+	 * the same marks, is never touched.
+	 */
+	public function test_only_posts_refract_made(): void {
+		$own  = self::factory()->post->create(
+			array(
+				'post_title' => 'Written on the site',
+				'meta_input' => array( '_refract_post_id' => 'refract-post-9' ),
+			)
+		);
+		$page = self::factory()->post->create(
+			array(
+				'post_type'  => 'page',
+				'post_title' => 'About',
+				'meta_input' => array(
+					'_refract_source'  => 'refract',
+					'_refract_post_id' => 'refract-post-9',
+				),
+			)
+		);
+
+		$this->assertSame( 'gone', $this->signed( 'DELETE', '/refract/v1/posts/refract-post-9' )->get_data()['status'] );
+
+		$created = $this->signed( 'POST', '/refract/v1/posts', $this->payload() );
+		$this->assertSame( 201, $created->get_status(), 'A new post, not an update of either.' );
+		$this->assertNotContains( $created->get_data()['id'], array( $own, $page ) );
+		$this->assertSame( 'Written on the site', get_post( $own )->post_title );
+		$this->assertSame( 'About', get_post( $page )->post_title );
+		$this->assertSame( 'publish', get_post_status( $own ) );
+		$this->assertSame( 'publish', get_post_status( $page ) );
 	}
 
 	/**
@@ -334,6 +377,7 @@ final class Test_Receiver extends Refract_Test_Case {
 		$this->assertStringContainsString( wp_get_upload_dir()['baseurl'], $post->post_content );
 		$this->assertNotContains( 'https://images.test/not-in-content.png', $this->downloads );
 		$this->assertSame( $post->ID, wp_get_post_parent_id( $thumbnail ) );
+		$this->assertSame( $this->editor, (int) get_post_field( 'post_author', $thumbnail ), 'Downloaded images belong to the "Publish as" person.' );
 
 		$count = count( $this->downloads );
 		$this->signed( 'POST', '/refract/v1/posts', $this->payload( array( 'featured_image' => array( 'url' => 'https://images.test/media/7f3a' ) ) ) );

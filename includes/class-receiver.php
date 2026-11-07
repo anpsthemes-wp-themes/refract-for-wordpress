@@ -14,9 +14,10 @@ use WP_REST_Response;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * `POST refract/v1/posts`: creates or updates a post as the "Publish as" person, with its images downloaded into the
- * media library. Posts from Refract are marked so they're never sent back. `DELETE refract/v1/posts/{id}` moves one to
- * the trash.
+ * `POST refract/v1/posts`: creates a post, or updates one Refract made before, with its images downloaded into the
+ * media library. Posts from Refract are marked so they're never sent back. `DELETE refract/v1/posts/{id}` moves one
+ * Refract made to the trash. Refract never acts as a user: the "Publish as" person is only the posts' author, and what
+ * that person may do is checked with user_can() before anything changes.
  */
 final class Receiver {
 
@@ -52,26 +53,26 @@ final class Receiver {
 		}
 
 		$existing = self::find( $input['refract_post_id'] );
-		$previous = get_current_user_id();
 
-		wp_set_current_user( $user->ID );
-
-		try {
-			if ( $existing > 0 && ! current_user_can( 'edit_post', $existing ) ) {
-				return $cannot;
-			}
-
-			$result = self::save( $input, $existing, $user->ID, $settings['default_category'] );
-
-			if ( is_wp_error( $result ) ) {
-				return $result;
-			}
-
-			$status = (string) get_post_status( $result );
-			$link   = in_array( $status, array( 'draft', 'pending' ), true ) ? get_edit_post_link( $result, 'raw' ) : get_permalink( $result );
-		} finally {
-			wp_set_current_user( $previous );
+		if ( $existing > 0 && ! user_can( $user, 'edit_post', $existing ) ) {
+			return $cannot;
 		}
+
+		$result = self::save( $input, $existing, $user->ID, $settings['default_category'] );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		$status = (string) get_post_status( $result );
+		// get_edit_post_link() needs a signed-in user, and none is.
+		$link = in_array( $status, array( 'draft', 'pending' ), true ) ? add_query_arg(
+			array(
+				'post'   => $result,
+				'action' => 'edit',
+			),
+			admin_url( 'post.php' )
+		) : get_permalink( $result );
 
 		Activity::log(
 			'received',
@@ -93,8 +94,8 @@ final class Receiver {
 	}
 
 	/**
-	 * `DELETE refract/v1/posts/{refract_post_id}`: moves the post made from that Refract post to the trash, as the
-	 * "Publish as" person. A post that's no longer here (never made, already trashed or deleted) counts as removed.
+	 * `DELETE refract/v1/posts/{refract_post_id}`: moves the post made from that Refract post to the trash, when the
+	 * "Publish as" person could. A post that's no longer here (never made, already trashed or deleted) counts as removed.
 	 *
 	 * @param WP_REST_Request $request The signed request.
 	 * @return WP_REST_Response|WP_Error
@@ -118,26 +119,15 @@ final class Receiver {
 			);
 		}
 
-		$user     = $settings['publish_as'] > 0 ? get_userdata( $settings['publish_as'] ) : false;
-		$cannot   = new WP_Error( 'refract_cannot_remove', __( 'The person Refract publishes as can\'t delete this post on this site.', 'refract' ), array( 'status' => 403 ) );
-		$previous = get_current_user_id();
+		$user   = $settings['publish_as'] > 0 ? get_userdata( $settings['publish_as'] ) : false;
+		$cannot = new WP_Error( 'refract_cannot_remove', __( 'The person Refract publishes as can\'t delete this post on this site.', 'refract' ), array( 'status' => 403 ) );
 
-		if ( false === $user ) {
+		if ( false === $user || ! user_can( $user, 'delete_post', $existing ) ) {
 			return $cannot;
 		}
 
-		wp_set_current_user( $user->ID );
-
-		try {
-			if ( ! current_user_can( 'delete_post', $existing ) ) {
-				return $cannot;
-			}
-
-			$title   = get_the_title( $existing );
-			$trashed = wp_trash_post( $existing );
-		} finally {
-			wp_set_current_user( $previous );
-		}
+		$title   = get_the_title( $existing );
+		$trashed = wp_trash_post( $existing );
 
 		if ( ! $trashed ) {
 			return new WP_Error( 'refract_remove_failed', __( 'WordPress couldn\'t move the post to the trash.', 'refract' ), array( 'status' => 500 ) );
@@ -278,7 +268,7 @@ final class Receiver {
 				continue;
 			}
 
-			$attachment = self::sideload( $image, $created );
+			$attachment = self::sideload( $image, $author, $created );
 
 			if ( is_wp_error( $attachment ) ) {
 				self::discard( $created );
@@ -293,7 +283,7 @@ final class Receiver {
 		$featured = 0;
 
 		if ( null !== $input['featured_image'] ) {
-			$featured = self::sideload( $input['featured_image'], $created );
+			$featured = self::sideload( $input['featured_image'], $author, $created );
 
 			if ( is_wp_error( $featured ) ) {
 				self::discard( $created );
@@ -333,7 +323,7 @@ final class Receiver {
 			'post_status'   => $input['status'],
 			'post_author'   => $author,
 			'post_category' => $categories,
-			'tax_input'     => array( 'post_tag' => $tag_ids ),
+			'tags_input'    => $tag_ids,
 			'meta_input'    => array(
 				'_refract_source'  => 'refract',
 				'_refract_post_id' => $input['refract_post_id'],
@@ -379,10 +369,11 @@ final class Receiver {
 	 * Downloads an image into the media library, or reuses the attachment made from the same URL before.
 	 *
 	 * @param array{url: string, alt: string} $image   The image.
+	 * @param int                             $author  The "Publish as" person, the attachment's author.
 	 * @param int[]                           $created Attachments made during this request (appended to).
 	 * @return int|WP_Error The attachment id.
 	 */
-	private static function sideload( array $image, array &$created ): int|WP_Error {
+	private static function sideload( array $image, int $author, array &$created ): int|WP_Error {
 		$known = get_posts(
 			array(
 				'post_type'      => 'attachment',
@@ -402,15 +393,9 @@ final class Receiver {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
 
-		$path = (string) wp_parse_url( $image['url'], PHP_URL_PATH );
+		$attachment = self::download( $image['url'], $author );
 
-		if ( 1 === preg_match( '/\.(jpe?g|png|gif|webp|avif|heic)$/i', $path ) ) {
-			$attachment = media_sideload_image( $image['url'], 0, null, 'id' );
-		} else {
-			$attachment = self::sideload_without_extension( $image['url'] );
-		}
-
-		if ( is_wp_error( $attachment ) || ! is_int( $attachment ) ) {
+		if ( is_wp_error( $attachment ) ) {
 			return new WP_Error(
 				'refract_invalid',
 				/* translators: %s: image URL. */
@@ -430,12 +415,14 @@ final class Receiver {
 	}
 
 	/**
-	 * Downloads an image whose URL has no file extension and names the file after its real type.
+	 * Downloads an image and adds it to the media library, named after its real type (a URL may have no extension, or
+	 * the wrong one).
 	 *
-	 * @param string $url The image URL.
+	 * @param string $url    The image URL.
+	 * @param int    $author The attachment's author.
 	 * @return int|WP_Error The attachment id.
 	 */
-	private static function sideload_without_extension( string $url ): int|WP_Error {
+	private static function download( string $url, int $author ): int|WP_Error {
 		$tmp = download_url( $url );
 
 		if ( is_wp_error( $tmp ) ) {
@@ -458,14 +445,16 @@ final class Receiver {
 			return new WP_Error( 'refract_not_image', __( 'That file isn\'t an image.', 'refract' ) );
 		}
 
-		$name = sanitize_file_name( basename( (string) wp_parse_url( $url, PHP_URL_PATH ) ) );
+		$name = sanitize_file_name( pathinfo( (string) wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_FILENAME ) );
 		$name = ( '' === $name ? 'refract-image' : $name ) . '.' . $extensions[ $mime ];
 		$id   = media_handle_sideload(
 			array(
 				'name'     => $name,
 				'tmp_name' => $tmp,
 			),
-			0
+			0,
+			null,
+			array( 'post_author' => $author )
 		);
 
 		if ( is_wp_error( $id ) ) {
@@ -494,7 +483,7 @@ final class Receiver {
 	private static function find( string $refract_post_id ): int {
 		$ids = get_posts(
 			array(
-				'post_type'      => 'any',
+				'post_type'      => 'post',
 				'post_status'    => array( 'publish', 'draft', 'future', 'pending', 'private' ),
 				'posts_per_page' => 1,
 				'fields'         => 'ids',
