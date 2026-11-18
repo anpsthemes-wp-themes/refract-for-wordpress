@@ -12,6 +12,7 @@ const {
 	openSidebar,
 	reset,
 	runCron,
+	siteScreenshot,
 	uploadImage,
 } = require( '../utils' );
 
@@ -110,6 +111,7 @@ test.describe( 'Block editor', () => {
 		const versions = panel.locator( '.refract-version' );
 		await expect( versions ).toHaveCount( 6 );
 		await expect( versions.first() ).toContainText( 'Writing…' );
+		await siteScreenshot( page, 'sent' );
 
 		await mock( requestUtils, 'advance', { to: 'written' } );
 		const ready = await deliver( requestUtils, playwright );
@@ -134,6 +136,7 @@ test.describe( 'Block editor', () => {
 		).toBeVisible();
 
 		await directoryScreenshot( page, 3 );
+		await siteScreenshot( page, 'approve' );
 
 		await panel
 			.getByRole( 'button', { name: 'Approve all and add to queue' } )
@@ -158,22 +161,26 @@ test.describe( 'Block editor', () => {
 
 		await page.reload();
 		const done = await openSidebar( page );
-		const instagram = done
+		const bluesky = done
 			.locator( '.refract-version' )
-			.filter( { hasText: '@kolocoffee' } )
+			.filter( { hasText: '@kolo.coffee' } )
 			.first();
 		await expect(
 			done.locator( '.refract-version.is-posted' )
 		).toHaveCount( 6 );
 		await expect(
-			instagram.getByRole( 'link', { name: /Posted/ } )
-		).toHaveAttribute( 'href', /^https:\/\/www\.instagram\.com\/p\// );
-		await expect( instagram ).toContainText( '48 clicks from Instagram' );
+			bluesky.getByRole( 'link', { name: /Posted/ } )
+		).toHaveAttribute(
+			'href',
+			/^https:\/\/bsky\.app\/profile\/kolo\.coffee\/post\//
+		);
+		await expect( bluesky ).toContainText( '48 clicks from Bluesky' );
 		await expect(
 			done
 				.locator( '.refract-version' )
 				.filter( { hasText: 'Kolo Coffee Roasters' } )
-		).toContainText( '23 clicks from LinkedIn' );
+		).toContainText( '23 clicks from Pinterest' );
+		await siteScreenshot( page, 'posted' );
 
 		// The Activity page lists the whole story.
 		await admin.visitAdminPage( 'admin.php', 'page=refract-activity' );

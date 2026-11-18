@@ -30,7 +30,7 @@ test.describe( 'Classic Editor meta box', () => {
 		await expect( box.locator( 'h2' ) ).toHaveText( 'Refract' );
 		await expect( box.getByLabel( 'Send to Refract' ) ).toBeChecked();
 		await expect(
-			box.getByLabel( 'Instagram · @kolocoffee' )
+			box.getByLabel( 'Mastodon · @kolo@mastodon.social' )
 		).toBeChecked();
 		await expect( box.locator( '.description' ).first() ).toHaveText(
 			'5 versions · 5 credits'

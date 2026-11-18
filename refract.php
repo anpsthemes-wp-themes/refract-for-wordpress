@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Refract
- * Plugin URI:        https://refract.social/platforms/wordpress
- * Description:       Turn each blog post into a post for every social network, in your voice. Approve every one, then let Refract schedule them.
- * Version:           1.2.1
+ * Plugin Name:       Refract – AI Social Media Scheduler for Blog Posts
+ * Plugin URI:        https://refract.social/wordpress-plugin
+ * Description:       Share each blog post to Bluesky, Mastodon, Pinterest and Telegram. AI writes a version for each network in your voice; you approve before it posts.
+ * Version:           1.2.2
  * Requires at least: 6.8
  * Requires PHP:      8.1
  * Author:            Refract

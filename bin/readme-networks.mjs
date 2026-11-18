@@ -7,7 +7,9 @@
  *
  * Usage: `node bin/readme-networks.mjs [readme path]` (default: the readme.txt next to bin/). The base URL is
  * `REFRACT_URL` (default https://refract.social), e.g. a local Refract or a fixture server.
- * Exits non-zero, and leaves the readme alone, when the list can't be fetched or doesn't look right.
+ * Exits non-zero, and leaves the readme alone, when the list can't be fetched or doesn't look right, or when the rest
+ * of the readme (the short description, an example, the FAQ) names a network that's Coming soon: only the "Coming
+ * soon:" line may. The changelog is history and isn't checked. Tested by bin/readme-networks.test.mjs.
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -50,10 +52,11 @@ function joinLabels(labels) {
 }
 
 /**
- * The lines between the markers: the networks you can connect, then Beta and Coming soon when there are any.
+ * The lines between the markers (the networks you can connect, then Beta and Coming soon when there are any) and the
+ * labels of the networks coming soon.
  *
  * @param {unknown} networks
- * @return {string}
+ * @return {{block: string, soon: string[]}}
  */
 function render(networks) {
 	if (!Array.isArray(networks) || networks.length === 0) {
@@ -91,7 +94,23 @@ function render(networks) {
 		lines.push('', `Coming soon: ${joinLabels(groups.soon)}.`);
 	}
 
-	return lines.join('\n');
+	return { block: lines.join('\n'), soon: groups.soon };
+}
+
+/**
+ * The Coming soon networks the readme names outside the networks block, before its changelog. "X card" is the preview
+ * tag's name, not the network.
+ *
+ * @param {string}   readme
+ * @param {string[]} soon
+ * @return {string[]}
+ */
+function soonMentions(readme, soon) {
+	const text = (readme.slice(0, readme.indexOf(START)) + readme.slice(readme.indexOf(END) + END.length))
+		.split('== Changelog ==')[0]
+		.replaceAll('X card', '');
+
+	return soon.filter((label) => new RegExp(`\\b${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(text));
 }
 
 try {
@@ -103,8 +122,13 @@ try {
 		throw new Error(`${readmePath} has no ${START} … ${END} block.`);
 	}
 
-	const block = render(await load());
+	const { block, soon } = render(await load());
 	const updated = `${readme.slice(0, start + START.length)}\n${block}\n${readme.slice(end)}`;
+	const mentioned = soonMentions(updated, soon);
+
+	if (mentioned.length > 0) {
+		throw new Error(`The readme names ${joinLabels(mentioned)} outside the networks list, but ${mentioned.length === 1 ? "it's" : "they're"} Coming soon.`);
+	}
 
 	await writeFile(readmePath, updated);
 	console.log(block);

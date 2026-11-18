@@ -66,15 +66,19 @@ The Activity page.
 
 ## Install
 
-1. Download `refract.zip` from the [latest release](https://github.com/anpsthemes-wp-themes/refract-for-wordpress/releases/latest).
-2. In WordPress, go to Plugins › Add New Plugin › Upload Plugin, choose the file, then select Install Now and Activate.
-3. Go to Refract › Settings and click "Connect to Refract". Sign in to Refract, or start a free trial, and allow the
+1. In WordPress, go to Plugins › Add New Plugin, search for "Refract", then select Install Now and Activate. The plugin is
+   free in the [WordPress plugin directory](https://wordpress.org/plugins/refract/).
+2. Go to Refract › Settings and click "Connect to Refract". Sign in to Refract, or start a free trial, and allow the
    connection.
+
+To install it by hand, download [refract.zip](https://downloads.wordpress.org/plugin/refract.zip) from WordPress.org, or
+from the [latest release](https://github.com/anpsthemes-wp-themes/refract-for-wordpress/releases/latest) here. Then go
+to Plugins › Add New Plugin › Upload Plugin, choose the file, and select Install Now and Activate.
 
 Don't install the source code from GitHub's green "Code › Download ZIP" button. That zip has no `build/` folder (the built
 editor scripts), and its folder isn't named `refract`.
 
-To update, download the new `refract.zip` and upload it the same way. WordPress offers "Replace current with uploaded".
+WordPress updates the plugin like your other plugins, also when you installed it from a zip.
 
 ## What's sent to Refract
 

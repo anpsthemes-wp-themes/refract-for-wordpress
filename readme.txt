@@ -1,24 +1,24 @@
-=== Refract ===
+=== Refract – AI Social Media Scheduler for Blog Posts ===
 Contributors: anpsthemes
-Tags: social media, social sharing, schedule posts, open graph, content repurposing
+Tags: social media, scheduler, schedule posts, bluesky, mastodon
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Turn each blog post into a post for every social network, in your voice. Approve every one, then let Refract schedule them.
+Share each blog post to Bluesky, Mastodon, Pinterest and Telegram. AI writes a version for each network in your voice; you approve before it posts.
 
 == Description ==
 
-You already write on your blog. With Refract, you don't have to write the same thing again for every network.
+Refract shares every blog post you publish to Bluesky, Mastodon, Pinterest, Telegram and the other networks you connect, with a version written for each network in your voice. You approve each version in the post editor or in Refract, and Refract posts it.
 
 When you publish a post, Refract gets it as a note. It writes a version for each account you chose, in your workspace's voice, and crops the post's images for each network. Every version waits for your approval. You preview and approve the versions in the post editor, or in Refract. Nothing goes out until you approve it.
 
 = Bring readers back from social =
 
-Each version links back to your post, so your blog gets visits and your links get shared. Once a version is posted, the post editor shows the link to it and the clicks so far, for example "12 clicks from Instagram".
+Each version links back to your post, so your blog gets visits and your links get shared. Once a version is posted, the post editor shows the link to it and the clicks so far, for example "12 clicks from Bluesky".
 
 = From WordPress to Refract =
 
@@ -39,9 +39,9 @@ The plugin can add social preview tags (Open Graph and X card), so your links sh
 = Networks =
 
 <!-- networks -->
-Networks you can connect: TikTok, YouTube, Pinterest, Bluesky, Mastodon, Telegram, Discord, Tumblr, Slack, Pixelfed and DEV.
+Networks you can connect: TikTok, YouTube, X, Pinterest, Bluesky, Mastodon, Telegram, Discord, Tumblr, Slack, Pixelfed and DEV.
 
-Coming soon: Instagram, Facebook, Threads and X.
+Coming soon: Instagram, Facebook, Threads, LinkedIn, Google Business Profile and Lemmy.
 <!-- /networks -->
 
 = What you need =
@@ -54,7 +54,7 @@ Coming soon: Instagram, Facebook, Threads and X.
 
 The JavaScript in `build/` is made with [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts). Its unminified source is in the plugin's `src/` folder, and the build setup is in `package.json` and `webpack.config.js`. To build it yourself, run `npm install` and then `npm run build` in the plugin's folder. The source code is also on GitHub: [anpsthemes-wp-themes/refract-for-wordpress](https://github.com/anpsthemes-wp-themes/refract-for-wordpress).
 
-The network icons in `src/common/marks.js` come from [Simple Icons](https://simpleicons.org) (CC0 1.0). The Refract and LinkedIn marks are drawn for this plugin.
+The network icons in `src/common/marks.js` come from [Simple Icons](https://simpleicons.org) (CC0 1.0). The Refract mark, and the network marks Simple Icons doesn't have, are drawn for this plugin.
 
 == Installation ==
 
@@ -66,17 +66,33 @@ If the redirect back to your site doesn't work, for example on a local site or a
 
 == Frequently Asked Questions ==
 
+= Does it post without my approval? =
+
+No. Every version waits for your OK. You approve it in the post editor's Refract panel or in Refract, and only then does Refract add it to your queue. Sending a post to Refract when you publish only starts the writing: nothing is posted until you approve it.
+
+= Which networks can it post to? =
+
+The networks listed under Networks above. Networks marked Coming soon can't be connected yet. The list is also at [refract.social/wordpress-plugin](https://refract.social/wordpress-plugin).
+
+= Is it free? =
+
+The plugin is free. Refract is a paid service, with a free trial and no card needed. Each version costs 1 AI credit, and your plan includes credits each month; with your own AI key in Refract, versions cost no credits. Sending the same post, with the link, to every account is always free. If you run out of credits, the post sidebar tells you, and you can send the same post to every account instead.
+
+= Does it work with the block editor and the Classic Editor? =
+
+Yes. In the block editor, Refract is a panel in the sidebar. With the Classic Editor plugin, it's a box next to your post. Both show each version with its text, its image in the network's shape and its status, with Approve and Edit in Refract.
+
+= Will it slow my site down? =
+
+No. It adds no scripts or styles to the pages your visitors see. Posts go to Refract in the background, through WP-Cron, a few seconds after you publish, so publishing doesn't wait for Refract. On your pages it only adds social preview tags (Open Graph and X card), and only when no SEO plugin adds them already; you can turn them off. For those previews it also keeps a 1200 × 630 copy of each image you upload.
+
+= Can Refract publish to my WordPress site? =
+
+Yes, if you turn on "Let Refract publish to this site" in the plugin's settings. It then sends drafts only, unless you choose "Publish and schedule posts". Refract can create posts, update the posts it created and move them to the trash; it can't change anything else on your site. You choose which user the posts show as their author, and the default category. Posts that come from Refract are never sent back to Refract.
+
 = Do I need a Refract account? =
 
 Yes. The plugin connects your site to Refract, which writes the versions and schedules the posts. You can start with a free trial.
-
-= Does anything go out without my approval? =
-
-No. Every version waits for your approval. Approve it in the post editor or in Refract, and Refract schedules it in your queue.
-
-= What does it cost? =
-
-The plugin is free. Refract is a paid service with a free trial. Each version costs 1 AI credit, or none with your own AI key. "The same post for every account, with the link" is always free. If you run out of credits, the post sidebar tells you, and you can send the same post to every account instead.
 
 = What is sent to Refract, and when? =
 
@@ -89,10 +105,6 @@ Yes. Click "Edit in Refract" on the version to open it in Refract.
 = What happens when I update a post that was already sent? =
 
 By default, Refract updates the note when the title, excerpt or text changes. You can choose "Leave it" in the settings instead.
-
-= Can Refract publish to my site? =
-
-Only if you turn on "Let Refract publish to this site" in the settings. It then sends drafts only, unless you choose "Publish and schedule posts". Refract can only create posts, update the posts it created and move them to the trash; it can't change anything else on your site. Posts that come from Refract are never sent back to Refract.
 
 = Does it work with multisite? =
 
@@ -130,6 +142,11 @@ Refract's privacy policy: https://refract.social/legal/privacy
 
 == Changelog ==
 
+= 1.2.2 =
+* A clearer name and description in the plugin directory: "Refract – AI Social Media Scheduler for Blog Posts".
+* New screenshots, with accounts on networks you can connect today.
+* No change to how the plugin works.
+
 = 1.2.1 =
 * Publishing from Refract never acts as a user on your site. The "Publish as" person is only shown as the author, and what they can do is checked before anything changes.
 * Publishing from Refract sends drafts only until you choose "Publish and schedule posts".
@@ -149,6 +166,9 @@ Refract's privacy policy: https://refract.social/legal/privacy
 * First release: connect your site, send posts to Refract, preview and approve the versions in the editor, publish from Refract to your site, social preview tags and the Activity log.
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+A clearer name and description. No change to how the plugin works.
 
 = 1.2.1 =
 Publishing from Refract no longer acts as a user, and sends drafts only by default.

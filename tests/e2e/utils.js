@@ -13,12 +13,12 @@ const FIXTURES = path.join( __dirname, 'fixtures' );
  * The accounts the mock workspace has, by id.
  */
 const ACCOUNTS = {
-	instagram: 'acc-ig-kolo',
-	roastery: 'acc-ig-roastery',
-	facebook: 'acc-fb-kolo',
-	linkedin: 'acc-li-kolo',
 	bluesky: 'acc-bsky-kolo',
-	threads: 'acc-threads-kolo',
+	roastery: 'acc-bsky-roastery',
+	mastodon: 'acc-masto-kolo',
+	pinterest: 'acc-pin-kolo',
+	telegram: 'acc-tg-kolo',
+	x: 'acc-x-kolo',
 };
 
 /**
@@ -171,6 +171,26 @@ async function directoryScreenshot( page, number ) {
 	} );
 }
 
+/**
+ * Writes a screenshot for refract.social/wordpress-plugin to artifacts/site
+ * when REFRACT_SCREENSHOTS is set; the site's
+ * scripts/promo-screenshots/wordpress-plugin.ts encodes them for the page.
+ *
+ * @param {Object} page Page.
+ * @param {string} name Screenshot name, e.g. `settings`.
+ */
+async function siteScreenshot( page, name ) {
+	if ( ! process.env.REFRACT_SCREENSHOTS ) {
+		return;
+	}
+
+	await page.screenshot( {
+		path: path.join( PACKAGE, `artifacts/site/${ name }.png` ),
+		animations: 'disabled',
+		caret: 'hide',
+	} );
+}
+
 module.exports = {
 	ACCOUNTS,
 	FIXTURES,
@@ -181,5 +201,6 @@ module.exports = {
 	openSidebar,
 	reset,
 	runCron,
+	siteScreenshot,
 	uploadImage,
 };

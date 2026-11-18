@@ -7,6 +7,7 @@ const {
 	ACCOUNTS,
 	connect,
 	directoryScreenshot,
+	siteScreenshot,
 	mock,
 	reset,
 } = require( '../utils' );
@@ -98,27 +99,27 @@ test.describe( 'Connecting to Refract', () => {
 
 		// Grouped by network, the main channel's network first with a star.
 		const networks = setup.locator( '.refract-accounts__network' );
-		await expect( networks.first() ).toHaveText( 'Instagram' );
+		await expect( networks.first() ).toHaveText( 'Bluesky' );
 		await expect( networks ).toHaveText( [
-			'Instagram',
-			'Facebook',
-			'LinkedIn',
 			'Bluesky',
-			/^ThreadsBeta$/,
+			'Mastodon',
+			'Pinterest',
+			'Telegram',
+			'X',
 			/^Google Business Profile/,
 		] );
-		const instagram = setup
+		const bluesky = setup
 			.locator( '.refract-accounts__group' )
-			.filter( { hasText: 'Instagram' } );
+			.filter( { hasText: 'Bluesky' } );
 		await expect(
-			instagram.locator( '.components-checkbox-control' ).first()
-		).toContainText( 'Kolo Coffee @kolocoffee ★' );
+			bluesky.locator( '.components-checkbox-control' ).first()
+		).toContainText( 'Kolo Coffee @kolo.coffee ★' );
 		await expect(
 			setup
 				.locator( '.refract-accounts__group' )
-				.filter( { hasText: 'Threads' } )
+				.filter( { hasText: 'Google Business Profile' } )
 				.locator( '.refract-tag' )
-		).toHaveText( 'Beta' );
+		).toHaveText( 'Coming soon' );
 
 		// Everything that can get a version is chosen; "soon" can't be.
 		await expect(
@@ -130,6 +131,7 @@ test.describe( 'Connecting to Refract', () => {
 		).toBeChecked();
 
 		await directoryScreenshot( page, 1 );
+		await siteScreenshot( page, 'settings' );
 
 		await page.getByLabel( /Kolo Roastery/ ).uncheck();
 		await page.getByLabel( 'Only when I choose, from the editor' ).check();
@@ -147,11 +149,11 @@ test.describe( 'Connecting to Refract', () => {
 		expect( state.settings.send_mode ).toBe( 'manual' );
 		expect( [ ...state.settings.accounts ].sort() ).toEqual(
 			[
-				ACCOUNTS.instagram,
-				ACCOUNTS.facebook,
-				ACCOUNTS.linkedin,
 				ACCOUNTS.bluesky,
-				ACCOUNTS.threads,
+				ACCOUNTS.mastodon,
+				ACCOUNTS.pinterest,
+				ACCOUNTS.telegram,
+				ACCOUNTS.x,
 			].sort()
 		);
 

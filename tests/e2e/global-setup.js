@@ -16,7 +16,12 @@ module.exports = async function globalSetup( config ) {
 	} );
 
 	await requestUtils.setupRest();
-	await requestUtils.activatePlugin( 'refract' );
+	// By its file, not activatePlugin(): that finds plugins by their display name.
+	await requestUtils.rest( {
+		method: 'PUT',
+		path: '/wp/v2/plugins/refract/refract',
+		data: { status: 'active' },
+	} );
 
 	for ( const slug of [ 'classic-editor', 'refract-fake-seo' ] ) {
 		await requestUtils.deactivatePlugin( slug );

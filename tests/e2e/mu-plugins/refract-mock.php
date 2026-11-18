@@ -77,12 +77,12 @@ final class Refract_Mock {
 	 */
 	public static function accounts(): array {
 		return array(
-			array( 'acc-ig-kolo', 'instagram', 'Instagram', 'Kolo Coffee', '@kolocoffee', true, 'available' ),
-			array( 'acc-ig-roastery', 'instagram', 'Instagram', 'Kolo Roastery', '@kolo.roastery', false, 'available' ),
-			array( 'acc-fb-kolo', 'facebook', 'Facebook', 'Kolo Coffee', 'kolocoffee', false, 'available' ),
-			array( 'acc-li-kolo', 'linkedin', 'LinkedIn', 'Kolo Coffee Roasters', 'kolo-coffee', false, 'available' ),
-			array( 'acc-bsky-kolo', 'bluesky', 'Bluesky', 'Kolo Coffee', '@kolo.coffee', false, 'available' ),
-			array( 'acc-threads-kolo', 'threads', 'Threads', 'Kolo Coffee', '@kolocoffee', false, 'beta' ),
+			array( 'acc-bsky-kolo', 'bluesky', 'Bluesky', 'Kolo Coffee', '@kolo.coffee', true, 'available' ),
+			array( 'acc-bsky-roastery', 'bluesky', 'Bluesky', 'Kolo Roastery', '@roastery.kolo.coffee', false, 'available' ),
+			array( 'acc-masto-kolo', 'mastodon', 'Mastodon', 'Kolo Coffee', '@kolo@mastodon.social', false, 'available' ),
+			array( 'acc-pin-kolo', 'pinterest', 'Pinterest', 'Kolo Coffee Roasters', 'kolocoffee', false, 'available' ),
+			array( 'acc-tg-kolo', 'telegram', 'Telegram', 'Kolo Coffee', '@kolocoffee', false, 'available' ),
+			array( 'acc-x-kolo', 'x', 'X', 'Kolo Coffee', '@kolocoffee', false, 'available' ),
 			array( 'acc-gbp-kolo', 'google_business', 'Google Business Profile', 'Kolo Coffee Ljubljana', '', false, 'soon' ),
 			array( self::SITE_ACCOUNT, 'wordpress', 'WordPress', 'Kolo Coffee', 'localhost:8889', false, 'available' ),
 		);
@@ -592,12 +592,12 @@ final class Refract_Mock {
 			$written = 'writing' !== $version['status'];
 			$media   = array();
 
-			foreach ( array_slice( $post['media'], 0, 'instagram' === $account['network'] ? 3 : 1 ) as $item ) {
+			foreach ( array_slice( $post['media'], 0, 1 ) as $item ) {
 				$media[] = array(
 					'url'       => (string) ( $item['url'] ?? '' ),
 					'thumb_url' => (string) ( $item['url'] ?? '' ),
-					'width'     => 'instagram' === $account['network'] ? 1080 : 1200,
-					'height'    => 'instagram' === $account['network'] ? 1350 : 630,
+					'width'     => 'pinterest' === $account['network'] ? 1000 : 1200,
+					'height'    => 'pinterest' === $account['network'] ? 1500 : 630,
 					'alt'       => (string) ( $item['alt'] ?? '' ),
 					'type'      => 'image',
 				);
@@ -660,11 +660,11 @@ final class Refract_Mock {
 		}
 
 		$texts = array(
-			'instagram' => "Our autumn Huila just landed ☕\n\nRed apple, panela and a soft orange finish. We roasted it light on Tuesday, so it's at its best as a pour-over this week.\n\nIn the shop and online from today. Link in bio.",
-			'facebook'  => "The autumn Huila is here. It comes from the Gómez family's farm near Pitalito, and we roasted it light so the red apple and panela come through. Try it as a pour-over: 15 g to 250 g of water at 94 °C.\n\nThe tasting notes and brew guide: " . $url,
-			'linkedin'  => "Every autumn we buy from the same three farms in Huila, Colombia. This year's lot is the sweetest we've had: red apple, panela, orange.\n\nPaying above the market price for six years has meant better coffee every year. Here's what changed: " . $url,
-			'bluesky'   => 'The autumn Huila is in. Red apple, panela, a soft orange finish. Light roast, best as a pour-over. ' . $url,
-			'threads'   => "New coffee day ☕ The autumn Huila is in: red apple, panela and orange. What's your go-to brew for a light roast?",
+			'bluesky'   => "Our autumn Huila just landed ☕\n\nRed apple, panela and a soft orange finish. We roasted it light on Tuesday, so it's at its best as a pour-over this week: " . $url,
+			'mastodon'  => "The autumn Huila is here. It comes from the Gómez family's farm near Pitalito, and we roasted it light so the red apple and panela come through. Try it as a pour-over: 15 g to 250 g of water at 94 °C.\n\nThe tasting notes and brew guide: " . $url . "\n\n#coffee #SpecialtyCoffee",
+			'pinterest' => "Autumn Huila pour-over: red apple, panela and orange. Our light roast from the Gómez family's farm in Huila, Colombia, with the recipe: 15 g of coffee to 250 g of water at 94 °C.",
+			'telegram'  => "New on the shelf: the autumn Huila ☕ Red apple, panela and a soft orange finish, roasted light for pour-over. The tasting notes and brew guide: " . $url,
+			'x'         => 'The autumn Huila is in ☕ Red apple, panela, a soft orange finish. Light roast, made for pour-over. ' . $url,
 		);
 
 		return $texts[ $network ] ?? $title . ' ' . $url;
@@ -1041,7 +1041,7 @@ final class Refract_Mock {
 		$settings = (array) ( $request->get_param( 'settings' ) ?? array() );
 		\Refract\WP\Settings::update(
 			$settings + array(
-				'accounts'   => array( 'acc-ig-kolo', 'acc-ig-roastery', 'acc-fb-kolo', 'acc-li-kolo', 'acc-bsky-kolo', 'acc-threads-kolo' ),
+				'accounts'   => array( 'acc-bsky-kolo', 'acc-bsky-roastery', 'acc-masto-kolo', 'acc-pin-kolo', 'acc-tg-kolo', 'acc-x-kolo' ),
 				'setup_done' => true,
 			)
 		);
@@ -1074,11 +1074,11 @@ final class Refract_Mock {
 
 				if ( 'posted' === $to && in_array( $version['status'], array( 'scheduled', 'approved' ), true ) ) {
 					$permalink = array(
-						'instagram' => 'https://www.instagram.com/p/C' . substr( md5( $account_id . $id ), 0, 10 ) . '/',
-						'facebook'  => 'https://www.facebook.com/kolocoffee/posts/' . hexdec( substr( md5( $id ), 0, 8 ) ),
-						'linkedin'  => 'https://www.linkedin.com/feed/update/urn:li:activity:' . hexdec( substr( md5( $id ), 0, 10 ) ),
-						'bluesky'   => 'https://bsky.app/profile/kolo.coffee/post/3l' . substr( md5( $id ), 0, 11 ),
-						'threads'   => 'https://www.threads.net/@kolocoffee/post/D' . substr( md5( $id ), 0, 10 ),
+						'bluesky'   => 'https://bsky.app/profile/' . ltrim( $account['handle'], '@' ) . '/post/3l' . substr( md5( $account_id . $id ), 0, 11 ),
+						'mastodon'  => 'https://mastodon.social/@kolo/' . hexdec( substr( md5( $id ), 0, 12 ) ),
+						'pinterest' => 'https://www.pinterest.com/pin/' . hexdec( substr( md5( $id ), 0, 12 ) ) . '/',
+						'telegram'  => 'https://t.me/kolocoffee/' . hexdec( substr( md5( $id ), 0, 4 ) ),
+						'x'         => 'https://x.com/kolocoffee/status/' . hexdec( substr( md5( $id ), 0, 14 ) ),
 					)[ $account['network'] ] ?? 'https://example.com/' . $account_id;
 
 					$post['versions'][ $account_id ]['status']    = 'posted';
